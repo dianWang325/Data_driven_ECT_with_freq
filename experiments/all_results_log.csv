@@ -1,0 +1,11 @@
+﻿时间戳,实验名称,流派,网络架构,核心超参数,测试集_R2,测试集_MSE(归一化),测试集_MSE(真实物理),数据源,产物目录
+20260309_1037,sweep_simulation,RF,RandomForest,Trees:100|Depth:15,0.9962,0.003924,0.186137,./data/raw/C_array.mat,./experiments/sweep_simulation_rf_20260309_1037
+20260309_1111,sweep_simulation,RF,RandomForest,Trees:100|Depth:15,0.978,0.022538,1.069184,./data/raw/G_array.mat,./experiments/sweep_simulation_rf_20260309_1111
+20260309_1113,sweep_simulation,RF,RandomForest,Trees:100|Depth:15,0.9838,0.016543,0.784778,./data/raw/theta_array.mat,./experiments/sweep_simulation_rf_20260309_1113
+20260309_1116,sweep_simulation,RF,RandomForest,Trees:100|Depth:15,0.9983,0.001775,0.084206,./data/raw/Z_array.mat,./experiments/sweep_simulation_rf_20260309_1116
+20260309_1122,sweep_simulation,DL,MLP_V1,LR:0.001|Epochs:50|Heads:4,0.9686,0.032149,1.525103,./data/raw/C_array.mat,./experiments/sweep_simulation_dl_20260309_1122
+20260309_1523,sweep_simulation,DL,MLP_V2,LR:0.001|Epochs:50|Heads:4,0.966,0.034777,1.649742,./data/raw/C_array.mat,./experiments/sweep_simulation_dl_20260309_1523
+20260309_1531,sweep_simulation,DL,MLP_V1,LR:0.001|Epochs:50|Heads:4,0.9924,0.00779,0.369532,./data/raw/Z_array.mat,./experiments/sweep_simulation_dl_20260309_1531
+20260309_1533,sweep_simulation,DL,MLP_V2,LR:0.001|Epochs:50|Heads:4,0.9934,0.006782,0.321736,./data/raw/Z_array.mat,./experiments/sweep_simulation_dl_20260309_1533
+20260309_1539,sweep_simulation,DL,ATTENTION_V1,LR:0.001|Epochs:50|Heads:4,0.9942,0.005906,0.280167,./data/raw/Z_array.mat,./experiments/sweep_simulation_dl_20260309_1539
+20260309_1627,sweep_simulation,DL,ATTENTION_V2,LR:0.001|Epochs:50|Heads:4,0.9977,0.00232,0.110065,./data/raw/Z_array.mat,./experiments/sweep_simulation_dl_20260309_1627

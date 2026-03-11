@@ -1,0 +1,33 @@
+# configs/experiment_config.yaml
+
+# --- 1. 全局与实验配置 ---
+experiment_name: "sweep_simulation"
+model_type: "rf"              # 选择运行的流派：'rf' (随机森林) 或 'dl' (深度学习)
+
+# --- 2. 数据加载配置 ---
+data:
+# 数据文件相对路径应当以终端执行代码时所处目录为基准，通常是main.py所在目录(也就是项目根目录)
+# 这是因为YAML文件相当于纯文本字典
+  file_path: "./data/raw/theta_array.mat"
+  mat_key: "theta"
+  batch_size: 128
+  test_size: 0.2
+  random_state: 42
+
+# --- 3. 深度学习 (DL) 专属参数 ---
+dl_params:
+  architecture: "attention"   # 可选: "mlp" 或 "attention"
+  epochs: 50
+  learning_rate: 0.001
+  weight_decay: 0.0001        # [新增] L2正则化，防过拟合
+  patience: 10                # [新增] 早停耐心值
+  hidden_dim: 128
+  num_layers: 2               # [新增] 控制网络的深度
+  num_heads: 4                # 多头注意力机制的头数 (如果有)
+  dropout_rate: 0.1
+
+# --- 4. 随机森林 (RF) 专属参数 ---
+rf_params:
+  n_estimators: 100
+  max_depth: 15
+  n_jobs: -1

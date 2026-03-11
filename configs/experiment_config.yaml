@@ -1,0 +1,39 @@
+# configs/experiment_config.yaml
+
+# --- 1. 全局与实验配置 ---
+experiment_name: "sweep_simulation"
+model_type: "dl"              # 选择运行的流派：'rf' (随机森林) 或 'dl' (深度学习)
+
+# --- 2. 数据加载配置 ---
+data:
+# 数据文件相对路径应当以终端执行代码时所处目录为基准，通常是main.py所在目录(也就是项目根目录)
+# 这是因为YAML文件相当于纯文本字典
+  file_path: "./data/raw/Z_array.mat"
+  mat_key: "Z"
+  batch_size: 128
+  test_size: 0.2
+  random_state: 42
+
+# --- 3. 深度学习 (DL) 专属参数 ---
+dl_params:
+  # 🌟 修改点 1：使用最新的架构注册名称
+  architecture: "attention_v2"      # 可选: "mlp_v1", "mlp_v2", "attention_v1", "attention_v2"
+  
+  epochs: 50
+  learning_rate: 0.001
+  weight_decay: 0.0001        # L2正则化，防过拟合
+  
+  # 🌟 修改点 2：与 trainer_dl.py 内部提取的键名保持严格一致
+  scheduler_patience: 10      # 早停耐心值 (连续 10 个 epoch val_loss 不降则触发衰减)
+  scheduler_factor: 0.5       # 学习率衰减因子 (0.5 表示每次减半)
+  
+  hidden_dim: 128             # 网络隐藏层维度
+  num_layers: 2               # 控制网络的深度 (注: 需配合网络类的动态构建生效)
+  num_heads: 4                # 多头注意力机制的头数 (仅 attention 架构生效)
+  dropout_rate: 0.1           # 随机失活率
+
+# --- 4. 随机森林 (RF) 专属参数 ---
+rf_params:
+  n_estimators: 100
+  max_depth: 15
+  n_jobs: -1

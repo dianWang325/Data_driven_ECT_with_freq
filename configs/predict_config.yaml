@@ -1,0 +1,14 @@
+# 文件路径: configs/predict_config.yaml
+
+prediction:
+  # 之前跑完的实验文件夹路径 (包含模型权重、Scaler 和原始配置文件)
+  exp_dir: "./experiments/sweep_simulation_dl_20260309_1627"
+  
+  # 全新的 .mat 盲测数据路径
+  new_data: "./data/raw/Z_array.mat"
+  
+  # 盲测数据字典的主键名
+  mat_key: "Z"
+  
+  # 预测结果的基础文件名前缀 (将自动以此前缀命名 CSV 和报告文件夹，并保存在 exp_dir 下)
+  output_prefix: "blind_test"
