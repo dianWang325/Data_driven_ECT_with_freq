@@ -1,0 +1,20 @@
+# 忽略特定的结果文件夹（包含数据权重与实验结果）
+基于5类电导率的数据权重与结果/
+基于完整电导率的数据权重与结果/
+
+# 忽略整个 notebooks 目录
+# 如果你想保留代码只忽略运行产生的 checkpoint，可以直接忽略整个目录
+notebooks/
+
+# 常见的 Python 缓存与系统文件（建议一并加上）
+__pycache__/
+.ipynb_checkpoints/
+*.py[cod]
+.DS_Store
+Thumbs.db
+
+# 常见的科研数据格式（可选，防止误传）
+*.mat
+*.npy
+*.pth
+*.h5
