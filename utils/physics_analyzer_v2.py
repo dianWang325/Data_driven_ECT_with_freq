@@ -1,18 +1,11 @@
 # 文件路径: utils/physics_analyzer.py
-
+## 纵轴有问题
 import os
 import torch
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-
-def calc_lvf(thickness):
-    """
-    根据厚度计算局部空隙率 (LVF)
-    公式: LVF = (50 * thickness - thickness**2) / 625
-    """
-    return (50 * thickness - thickness**2) / 625
 
 def analyze_and_visualize_physics_groups(model, X_test_t, y_test_t, scaler_X, scaler_y, save_base_dir):
     print("\n" + "="*40)
@@ -42,13 +35,8 @@ def analyze_and_visualize_physics_groups(model, X_test_t, y_test_t, scaler_X, sc
                 
             channel_importance = np.mean(attn_matrix, axis=(0, 1))
             
-            # 1. 提取反归一化后的厚度
-            pred_thick = scaler_y.inverse_transform(pred_y_scaled.cpu().numpy())[0][0]
-            true_thick = scaler_y.inverse_transform([[sample_y]])[0][0]
-            
-            # 2. 转换为真实的 LVF 值 (修正核心点)
-            pred_lvf = calc_lvf(pred_thick)
-            true_lvf = calc_lvf(true_thick)
+            pred_real = scaler_y.inverse_transform(pred_y_scaled.cpu().numpy())[0][0]
+            true_real = scaler_y.inverse_transform([[sample_y]])[0][0]
             
             sample_x_real = scaler_X.inverse_transform(sample_x.cpu().numpy())[0]
             sigma_real = sample_x_real[0]
@@ -59,10 +47,9 @@ def analyze_and_visualize_physics_groups(model, X_test_t, y_test_t, scaler_X, sc
                 'Sigma': sigma_real,
                 'Freq': freq_real,
                 'Ratio_SF': sigma_real / (freq_real + 1e-9), 
-                'True_Thickness': true_thick,  # 保留真实厚度用于后续特征区间分组
-                'True_LVF': true_lvf,
-                'Pred_LVF': pred_lvf,
-                'Error_Abs_LVF': abs(true_lvf - pred_lvf), # 误差变为 LVF 的绝对误差
+                'True_Thickness': true_real,
+                'Pred_Thickness': pred_real,
+                'Error_Abs': abs(true_real - pred_real),
                 'Importance_Array': channel_importance
             })
 
@@ -71,21 +58,19 @@ def analyze_and_visualize_physics_groups(model, X_test_t, y_test_t, scaler_X, sc
     df['Thick_Category'] = pd.qcut(df['True_Thickness'], q=3, labels=['薄环流', '中等环流', '厚环流'], duplicates='drop')
 
     # ==========================================
-    # 可视化 1：误差分析 (纵坐标已修正为 LVF 误差)
+    # 可视化 1：误差分析 (保持不变)
     # ==========================================
     plt.rcParams['font.sans-serif'] = ['SimHei']
     plt.rcParams['axes.unicode_minus'] = False
 
     fig1, axes1 = plt.subplots(1, 2, figsize=(16, 6))
-    
-    # 纵坐标更换为 Error_Abs_LVF
-    sns.barplot(x='Ratio_Category', y='Error_Abs_LVF', data=df, ax=axes1[0], capsize=.1, palette='Blues_d')
+    sns.barplot(x='Ratio_Category', y='Error_Abs', data=df, ax=axes1[0], capsize=.1, palette='Blues_d')
     axes1[0].set_title('不同 [电导率/频率] 比值下的预测绝对误差', fontsize=15)
-    axes1[0].set_ylabel('LVF 平均绝对误差 (MAE)', fontsize=13)
+    axes1[0].set_ylabel('平均绝对误差 (MAE)', fontsize=13)
     
-    sns.barplot(x='Thick_Category', y='Error_Abs_LVF', data=df, ax=axes1[1], capsize=.1, palette='Greens_d')
+    sns.barplot(x='Thick_Category', y='Error_Abs', data=df, ax=axes1[1], capsize=.1, palette='Greens_d')
     axes1[1].set_title('不同 [环流厚度] 下的预测绝对误差', fontsize=15)
-    axes1[1].set_ylabel('LVF 平均绝对误差 (MAE)', fontsize=13)
+    axes1[1].set_ylabel('平均绝对误差 (MAE)', fontsize=13)
 
     plt.tight_layout()
     fig1.savefig(os.path.join(save_dir, 'Accuracy_Analysis.png'), dpi=300, bbox_inches='tight')
